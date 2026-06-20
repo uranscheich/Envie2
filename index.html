@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="de" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0D0E13">
+<title>envie — Gemeinsam entdecken. Gemeinsam planen. Gemeinsam genießen.</title>
+<meta name="description" content="envie bringt Rezepte, gemeinsame Entscheidungen, Wochenplanung, Einkauf und Kochmodus in einen einzigen ruhigen Flow.">
+<style>
+:root{
+  --pink:#FF3378;
+  --pink-2:#FF7DAA;
+  --blue:#19A6FF;
+  --blue-2:#73C9FF;
+  --navy:#141B2D;
+  --ink:#0D0E13;
+  --paper:#F7F6F4;
+  --bg:#07080B;
+  --surface:#111319;
+  --surface-2:#181B23;
+  --surface-3:#20242E;
+  --text:#F7F6F4;
+  --muted:#A9ADB7;
+  --muted-2:#747986;
+  --line:rgba(255,255,255,.09);
+  --line-strong:rgba(255,255,255,.17);
+  --glass:rgba(16,18,24,.72);
+  --shadow:0 30px 90px rgba(0,0,0,.46);
+  --shadow-soft:0 18px 50px rgba(0,0,0,.22);
+  --radius:30px;
+  --radius-sm:20px;
+  --max:1240px;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",Arial,sans-serif;
+}
+html[data-theme="light"]{
+  --bg:#F7F6F4;
+  --surface:#FFFFFF;
+  --surface-2:#F0F0F3;
+  --surface-3:#E9E9EE;
+  --text:#141B2D;
+  --muted:#666C78;
+  --muted-2:#8B909A;
+  --line:rgba(20,27,45,.09);
+  --line-strong:rgba(20,27,45,.16);
+  --glass:rgba(247,246,244,.78);
+  --shadow:0 30px 90px rgba(20,27,45,.15);
+  --shadow-soft:0 18px 50px rgba(20,27,45,.10);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 12% -10%,rgba(255,51,120,.22),transparent 34rem),
+    radial-gradient(circle at 92% 8%,rgba(25,166,255,.18),transparent 34rem),
+    var(--bg);
+  color:var(--text);
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  transition:background .35s ease,color .35s ease;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.16;
+  z-index:999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+  mix-blend-mode:soft-light;
+}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+img{display:block;max-width:100%}
+.shell{width:min(var(--max),calc(100% - 40px));margin-inline:auto}
+.kicker{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  font-size:.76rem;
+  font-weight:750;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--pink-2);
+}
+.kicker::before{
+  content:"";
+  width:24px;height:2px;border-radius:99px;
+  background:linear-gradient(90deg,var(--pink),var(--blue));
+}
+h1,h2,h3,p{margin-top:0}
+h1,h2,h3{
+  letter-spacing:-.055em;
+  line-height:.98;
+}
+h1{font-size:clamp(4rem,9vw,8.5rem);margin-bottom:26px}
+h2{font-size:clamp(2.7rem,6vw,5.7rem);margin-bottom:22px}
+h3{font-size:clamp(1.35rem,2.3vw,2rem);letter-spacing:-.035em}
+.lead{
+  font-size:clamp(1.1rem,1.8vw,1.38rem);
+  line-height:1.55;
+  color:var(--muted);
+  max-width:720px;
+}
+.nav{
+  position:sticky;top:0;z-index:50;
+  border-bottom:1px solid var(--line);
+  background:var(--glass);
+  backdrop-filter:blur(24px) saturate(150%);
+  -webkit-backdrop-filter:blur(24px) saturate(150%);
+}
+.nav-inner{
+  height:72px;
+  display:flex;align-items:center;justify-content:space-between;gap:24px;
+}
+.logo{
+  display:flex;align-items:center;gap:12px;font-weight:780;letter-spacing:-.04em;font-size:1.18rem;
+}
+.logo img{width:38px;height:38px;object-fit:contain}
+.nav-links{display:flex;align-items:center;gap:26px;color:var(--muted);font-size:.94rem}
+.nav-links a{transition:color .2s ease,transform .2s ease}
+.nav-links a:hover{color:var(--text);transform:translateY(-1px)}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.icon-button,.pill{
+  border:1px solid var(--line);
+  color:var(--text);
+  background:var(--surface);
+  box-shadow:var(--shadow-soft);
+  cursor:pointer;
+  transition:transform .2s ease,border-color .2s ease,background .2s ease;
+}
+.icon-button:hover,.pill:hover{transform:translateY(-2px);border-color:var(--line-strong)}
+.icon-button{width:42px;height:42px;border-radius:50%;display:grid;place-items:center}
+.icon-button svg{width:18px;height:18px}
+.pill{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:12px 18px;border-radius:999px;
+  font-weight:700;
+}
+.pill.primary{
+  border:none;color:white;
+  background:linear-gradient(135deg,var(--pink),#FF5D91 52%,var(--blue));
+  box-shadow:0 16px 36px rgba(255,51,120,.26);
+}
+.hero{
+  min-height:calc(100vh - 72px);
+  display:flex;align-items:center;
+  padding:76px 0 110px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::after{
+  content:"";
+  position:absolute;
+  width:760px;height:760px;border-radius:50%;
+  right:-360px;top:-220px;
+  background:conic-gradient(from 30deg,rgba(255,51,120,.28),rgba(25,166,255,.20),transparent 64%);
+  filter:blur(46px);
+  pointer-events:none;
+}
+.hero-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.03fr) minmax(430px,.97fr);
+  gap:60px;
+  align-items:center;
+  position:relative;z-index:1;
+}
+.hero-copy{padding-top:18px}
+.gradient{
+  background:linear-gradient(110deg,var(--pink) 0%,#FF91B7 36%,var(--blue) 94%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero-copy .lead{max-width:650px;margin-bottom:34px}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:34px}
+.trust-row{display:flex;gap:10px;flex-wrap:wrap}
+.trust{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 12px;border-radius:999px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:.84rem;
+}
+.trust i{width:8px;height:8px;border-radius:50%;background:var(--pink);box-shadow:0 0 16px var(--pink)}
+.hero-stage{
+  position:relative;
+  height:760px;
+  perspective:1600px;
+}
+.phone{
+  position:absolute;
+  width:276px;
+  border-radius:44px;
+  padding:9px;
+  background:linear-gradient(150deg,#343740,#0B0C10 60%,#252832);
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.13);
+}
+.phone::before{
+  content:"";
+  position:absolute;inset:8px;border-radius:36px;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+  pointer-events:none;z-index:2;
+}
+.phone img{width:100%;border-radius:36px}
+.phone.center{
+  width:320px;left:50%;top:24px;
+  transform:translateX(-50%) rotateY(-5deg) rotateZ(-2deg);
+  z-index:3;
+}
+.phone.left{
+  left:0;top:130px;
+  transform:rotateY(18deg) rotateZ(-7deg) scale(.86);
+  z-index:1;filter:saturate(.85) brightness(.8);
+}
+.phone.right{
+  right:0;top:170px;
+  transform:rotateY(-18deg) rotateZ(7deg) scale(.84);
+  z-index:2;filter:saturate(.9) brightness(.86);
+}
+.stage-halo{
+  position:absolute;left:50%;top:50%;
+  width:520px;height:520px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle,rgba(255,51,120,.25),transparent 48%),radial-gradient(circle at 70% 30%,rgba(25,166,255,.25),transparent 45%);
+  filter:blur(30px);
+}
+.scroll-cue{
+  position:absolute;left:50%;bottom:22px;transform:translateX(-50%);
+  color:var(--muted-2);font-size:.8rem;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.scroll-cue span{width:1px;height:34px;background:linear-gradient(var(--pink),transparent)}
+section{padding:130px 0;position:relative}
+.band{
+  padding:24px 0;
+  border-block:1px solid var(--line);
+  background:linear-gradient(90deg,rgba(255,51,120,.08),rgba(25,166,255,.08));
+  overflow:hidden;
+}
+.marquee{
+  display:flex;gap:50px;width:max-content;
+  animation:marquee 26s linear infinite;
+  color:var(--muted);
+  font-weight:720;
+  letter-spacing:-.015em;
+}
+.marquee span{display:flex;align-items:center;gap:13px;white-space:nowrap}
+.marquee b{color:var(--text)}
+.marquee i{width:6px;height:6px;background:var(--pink);border-radius:50%}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.section-head{
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:48px;
+  align-items:end;
+  margin-bottom:60px;
+}
+.section-head .lead{margin-bottom:4px}
+.story-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.story-card{
+  min-height:300px;
+  padding:28px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.02),transparent),
+    var(--surface);
+  overflow:hidden;
+  position:relative;
+}
+.story-card::after{
+  content:"";
+  position:absolute;width:210px;height:210px;border-radius:50%;
+  right:-80px;bottom:-90px;
+  background:radial-gradient(circle,rgba(255,51,120,.18),transparent 68%);
+}
+.story-card.blue::after{background:radial-gradient(circle,rgba(25,166,255,.18),transparent 68%)}
+.story-number{
+  font-size:.78rem;letter-spacing:.14em;font-weight:800;color:var(--pink-2);text-transform:uppercase;
+  margin-bottom:74px;
+}
+.story-card p{color:var(--muted);line-height:1.55;margin-bottom:0}
+.story-chip{
+  position:absolute;right:24px;top:24px;
+  width:48px;height:48px;border-radius:16px;
+  display:grid;place-items:center;
+  background:var(--surface-2);border:1px solid var(--line);
+}
+.story-chip svg{width:22px;height:22px}
+.feature{
+  overflow:hidden;
+}
+.feature-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:center;
+}
+.feature-grid.reverse .visual{order:2}
+.visual{
+  position:relative;
+  min-height:760px;
+  display:flex;align-items:center;justify-content:center;
+}
+.visual .phone{
+  position:relative;inset:auto;width:330px;transform:none;z-index:2;
+}
+.visual .phone.secondary{
+  position:absolute;width:260px;right:0;bottom:20px;transform:rotate(7deg);z-index:3;
+}
+.visual .phone.secondary.lefty{left:0;right:auto;transform:rotate(-7deg)}
+.visual::before{
+  content:"";
+  position:absolute;
+  inset:8% 4%;
+  border-radius:48px;
+  background:
+    radial-gradient(circle at 25% 25%,rgba(255,51,120,.24),transparent 34%),
+    radial-gradient(circle at 76% 66%,rgba(25,166,255,.20),transparent 36%),
+    var(--surface);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-soft);
+}
+.copy-card{
+  padding:34px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+}
+.copy-card .lead{font-size:1.08rem}
+.metric-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:30px;
+}
+.metric{
+  padding:18px;border-radius:18px;background:var(--surface-2);border:1px solid var(--line);
+}
+.metric strong{display:block;font-size:1.35rem;letter-spacing:-.04em;margin-bottom:4px}
+.metric span{color:var(--muted);font-size:.86rem}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.mode{
+  padding:30px;border-radius:var(--radius);border:1px solid var(--line);background:var(--surface);
+  transition:transform .25s ease,border-color .25s ease;
+}
+.mode:hover{transform:translateY(-5px);border-color:var(--line-strong)}
+.mode-icon{
+  width:52px;height:52px;border-radius:18px;display:grid;place-items:center;margin-bottom:26px;
+  color:white;background:linear-gradient(145deg,var(--pink),var(--blue));
+}
+.mode-icon svg{width:23px;height:23px}
+.mode p{color:var(--muted);line-height:1.55}
+.mode small{display:block;margin-top:28px;color:var(--muted-2);font-weight:700;text-transform:uppercase;letter-spacing:.1em}
+.match-section{
+  background:
+    radial-gradient(circle at 16% 24%,rgba(255,51,120,.18),transparent 24rem),
+    radial-gradient(circle at 84% 72%,rgba(25,166,255,.18),transparent 24rem);
+}
+.match-card{
+  display:grid;grid-template-columns:.9fr 1.1fr;
+  gap:34px;align-items:center;
+  padding:38px;
+  border:1px solid var(--line);
+  border-radius:44px;
+  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.015)),var(--surface);
+  overflow:hidden;
+}
+.match-card .phone{position:relative;width:320px;inset:auto;transform:none;margin:auto}
+.match-card h2{margin-bottom:18px}
+.plan-showcase{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:end;
+}
+.plan-showcase .phone{position:relative;inset:auto;transform:none;width:100%;max-width:300px;margin:auto}
+.plan-showcase .phone:nth-child(2){transform:translateY(-42px)}
+.cookbook-card{
+  display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center;
+  padding:46px;border-radius:44px;background:var(--surface);border:1px solid var(--line);
+}
+.cookbook-card .phone{position:relative;inset:auto;transform:none;width:320px;margin:auto}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px}
+.stat{padding:18px;border-radius:18px;background:var(--surface-2);border:1px solid var(--line)}
+.stat strong{font-size:1.4rem;display:block;margin-bottom:2px}
+.stat span{font-size:.84rem;color:var(--muted)}
+.cooking-wrap{
+  display:grid;grid-template-columns:.8fr 1.2fr;gap:60px;align-items:center;
+}
+.cooking-wrap .phone{position:relative;inset:auto;transform:none;width:330px}
+.brand-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:36px;
+  overflow:hidden;
+  box-shadow:var(--shadow-soft);
+}
+.brand-card img{width:100%;height:auto}
+.brand-copy{
+  display:grid;grid-template-columns:.9fr 1.1fr;gap:52px;align-items:end;margin-bottom:44px;
+}
+.privacy-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.privacy-card{
+  padding:28px;border-radius:var(--radius);background:var(--surface);border:1px solid var(--line);
+}
+.privacy-card p{color:var(--muted);line-height:1.55}
+.privacy-card svg{width:28px;height:28px;color:var(--pink);margin-bottom:24px}
+.final{
+  padding:150px 0 120px;
+  text-align:center;
+}
+.final-panel{
+  border-radius:48px;
+  padding:84px 28px;
+  border:1px solid var(--line);
+  background:
+    radial-gradient(circle at 30% 20%,rgba(255,51,120,.22),transparent 32rem),
+    radial-gradient(circle at 75% 80%,rgba(25,166,255,.20),transparent 32rem),
+    var(--surface);
+  overflow:hidden;
+}
+.final-panel .lead{margin:0 auto 34px}
+.final-logo{width:96px;height:96px;margin:0 auto 28px;filter:drop-shadow(0 18px 34px rgba(255,51,120,.2))}
+footer{
+  padding:46px 0 34px;border-top:1px solid var(--line);color:var(--muted);
+}
+.footer-grid{display:flex;justify-content:space-between;gap:30px;align-items:flex-end}
+.footer-links{display:flex;gap:18px;flex-wrap:wrap}
+.footer-links a:hover{color:var(--text)}
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .85s cubic-bezier(.2,.7,.2,1),transform .85s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.lightbox{
+  position:fixed;inset:0;z-index:1000;
+  background:rgba(0,0,0,.88);
+  display:none;align-items:center;justify-content:center;padding:24px;
+  backdrop-filter:blur(14px);
+}
+.lightbox.open{display:flex}
+.lightbox img{max-height:92vh;max-width:min(94vw,620px);border-radius:34px;box-shadow:0 40px 120px rgba(0,0,0,.6)}
+.lightbox button{
+  position:absolute;right:24px;top:24px;
+  width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.08);color:white;font-size:1.4rem;cursor:pointer;
+}
+.zoomable{cursor:zoom-in}
+@media(max-width:1050px){
+  .hero-grid,.feature-grid,.cookbook-card,.cooking-wrap,.brand-copy{grid-template-columns:1fr}
+  .hero-stage{height:680px;max-width:700px;width:100%;margin:0 auto}
+  .feature-grid.reverse .visual{order:0}
+  .section-head{grid-template-columns:1fr}
+  .story-grid,.mode-grid,.privacy-grid{grid-template-columns:1fr}
+  .feature-grid{gap:28px}
+  .visual{min-height:680px}
+}
+@media(max-width:760px){
+  .shell{width:min(100% - 24px,var(--max))}
+  .nav-links,.nav-actions .pill{display:none}
+  .nav-inner{height:64px}
+  .hero{padding:46px 0 76px;min-height:auto}
+  .hero-grid{gap:18px}
+  .hero-stage{height:510px}
+  .phone.center{width:250px}
+  .phone.left,.phone.right{width:205px;top:150px}
+  .phone.left{left:-24px}
+  .phone.right{right:-24px}
+  h1{font-size:clamp(3.4rem,18vw,5.2rem)}
+  h2{font-size:clamp(2.5rem,13vw,4rem)}
+  section{padding:88px 0}
+  .section-head{gap:20px;margin-bottom:36px}
+  .match-card{grid-template-columns:1fr;padding:22px}
+  .plan-showcase{grid-template-columns:1fr}
+  .plan-showcase .phone:nth-child(2){transform:none}
+  .cookbook-card{padding:24px}
+  .stat-row{grid-template-columns:1fr}
+  .cooking-wrap{gap:28px}
+  .feature-grid{gap:20px}
+  .visual{min-height:600px}
+  .visual .phone{width:280px}
+  .visual .phone.secondary{width:210px}
+  .footer-grid{display:block}
+  .footer-links{margin-top:22px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;scroll-behavior:auto!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="shell nav-inner">
+    <a class="logo" href="#top" aria-label="envie Startseite">
+      <img src="assets/logo.png" alt="">
+      <span>envie</span>
+    </a>
+    <div class="nav-links">
+      <a href="#flow">Flow</a>
+      <a href="#entscheiden">Entscheiden</a>
+      <a href="#plan">Planen</a>
+      <a href="#kochbuch">Kochbuch</a>
+      <a href="#kochen">Kochen</a>
+    </div>
+    <div class="nav-actions">
+      <a class="pill" href="#brand">Marke</a>
+      <button class="icon-button" id="themeToggle" aria-label="Darstellung wechseln">
+        <svg class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z"/></svg>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="shell hero-grid">
+    <div class="hero-copy reveal">
+      <div class="kicker">iOS · Local-first · Gemeinsam</div>
+      <h1>Was essen wir <span class="gradient">heute?</span></h1>
+      <p class="lead">envie macht aus gespeicherten Rezepten echte Entscheidungen: entdecken, gemeinsam abstimmen, die Woche planen, einkaufen und fokussiert kochen.</p>
+      <div class="hero-buttons">
+        <a class="pill primary" href="#entscheiden">Die App entdecken</a>
+        <a class="pill" href="#plan">Zum Wochenplan</a>
+      </div>
+      <div class="trust-row">
+        <span class="trust"><i></i> Rezepte lokal verwalten</span>
+        <span class="trust"><i></i> Haushalte synchronisieren</span>
+        <span class="trust"><i></i> Freunde abstimmen lassen</span>
+      </div>
+    </div>
+    <div class="hero-stage reveal">
+      <div class="stage-halo"></div>
+      <div class="phone left zoomable"><img src="assets/friends.jpg" alt="envie Friends-Modus"></div>
+      <div class="phone center zoomable"><img src="assets/local.jpg" alt="envie Entscheidungszentrale Lokal"></div>
+      <div class="phone right zoomable"><img src="assets/plan-dark.jpg" alt="envie Wochenplan"></div>
+    </div>
+  </div>
+  <div class="scroll-cue">Weiter entdecken<span></span></div>
+</header>
+
+<div class="band" aria-hidden="true">
+  <div class="marquee">
+    <span><i></i><b>Rezeptimport</b> aus Bild, Screenshot und Web</span>
+    <span><i></i><b>Gemeinsam entscheiden</b> statt endlos diskutieren</span>
+    <span><i></i><b>Wochenplan</b> mit echter Einkaufskopplung</span>
+    <span><i></i><b>Kochmodus</b> mit Timer und Live Activity</span>
+    <span><i></i><b>Rezeptimport</b> aus Bild, Screenshot und Web</span>
+    <span><i></i><b>Gemeinsam entscheiden</b> statt endlos diskutieren</span>
+    <span><i></i><b>Wochenplan</b> mit echter Einkaufskopplung</span>
+    <span><i></i><b>Kochmodus</b> mit Timer und Live Activity</span>
+  </div>
+</div>
+
+<section id="flow">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div>
+        <div class="kicker">Ein ruhiger Produktflow</div>
+        <h2>Vom Fundstück zur fertigen Mahlzeit.</h2>
+      </div>
+      <p class="lead">Kein Feed, der dich beschäftigt. Ein klarer Weg, der dich von einem Rezeptfund bis zum Kochen bringt.</p>
+    </div>
+    <div class="story-grid">
+      <article class="story-card reveal">
+        <div class="story-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+        </div>
+        <div class="story-number">01 · Sammeln</div>
+        <h3>Rezepte retten.</h3>
+        <p>Fotos, Screenshots und Webrezepte landen nicht mehr irgendwo, sondern sauber strukturiert in deinem lokalen Kochbuch.</p>
+      </article>
+      <article class="story-card blue reveal">
+        <div class="story-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 12h8"/><path d="M12 8v8"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <div class="story-number">02 · Entscheiden</div>
+        <h3>Gemeinsam auswählen.</h3>
+        <p>Lokal, im Haushalt oder mit Freunden: envie trennt spontane Auswahl, Wochenplanung und freies Entdecken sauber voneinander.</p>
+      </article>
+      <article class="story-card reveal">
+        <div class="story-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19h16"/><path d="M6 17V7h12v10"/><path d="M9 7V4h6v3"/></svg>
+        </div>
+        <div class="story-number">03 · Machen</div>
+        <h3>Planen. Einkaufen. Kochen.</h3>
+        <p>Treffer werden zu Plänen, Pläne zu Einkaufslisten und Schritte zu einem fokussierten Kochmodus.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="feature" id="entscheiden">
+  <div class="shell feature-grid">
+    <div class="visual reveal">
+      <div class="phone zoomable"><img src="assets/local.jpg" alt="Lokale Entscheidungszentrale"></div>
+      <div class="phone secondary zoomable"><img src="assets/swipe-dark.jpg" alt="Woche planen Swipe-Modus"></div>
+    </div>
+    <div class="copy-card reveal">
+      <div class="kicker">Entscheidungszentrale</div>
+      <h2>Drei Kontexte. Kein Chaos.</h2>
+      <p class="lead">Lokal für gemeinsame Entscheidungen auf einem Gerät. Familie für dauerhafte Haushalte. Freunde für zeitlich begrenzte Gruppenabstimmungen.</p>
+      <div class="metric-grid">
+        <div class="metric"><strong>Lokal</strong><span>Offline, schnell, direkt</span></div>
+        <div class="metric"><strong>Familie</strong><span>Cloud-Sync im Haushalt</span></div>
+        <div class="metric"><strong>Freunde</strong><span>Zwei Abstimmungsrunden</span></div>
+        <div class="metric"><strong>1 Flow</strong><span>Von Auswahl bis Kochen</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shell">
+    <div class="section-head reveal">
+      <div>
+        <div class="kicker">Drei Modi</div>
+        <h2>Für jede Frage der richtige Modus.</h2>
+      </div>
+      <p class="lead">Spontan entscheiden, die Woche füllen oder einfach Geschmack entdecken — ohne dass alles dieselbe Bedeutung bekommt.</p>
+    </div>
+    <div class="mode-grid">
+      <article class="mode reveal">
+        <div class="mode-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-9 12h8l-1 8 9-12h-8z"/></svg></div>
+        <h3>Jetzt schnell</h3>
+        <p>Sieben Vorschläge. Der erste gemeinsame Treffer gewinnt und landet direkt am Zieltag.</p>
+        <small>7 Karten · klares Ende</small>
+      </article>
+      <article class="mode reveal">
+        <div class="mode-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/></svg></div>
+        <h3>Woche planen</h3>
+        <p>Bis zu zwanzig Karten. Solo-Likes bleiben Freigaben. Erst ein Match schreibt in den Plan.</p>
+        <small>Planung · gemeinsam</small>
+      </article>
+      <article class="mode reveal">
+        <div class="mode-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.5 8.5c-2 0-3.5 1.4-6.5 5-3-3.6-4.5-5-6.5-5a3.5 3.5 0 0 0 0 7c2 0 3.5-1.4 6.5-5 3 3.6 4.5 5 6.5 5a3.5 3.5 0 1 0 0-7Z"/></svg></div>
+        <h3>Endlos</h3>
+        <p>Unbegrenzt entdecken. Matches werden gemerkt, aber verändern den Wochenplan nicht.</p>
+        <small>Geschmack · ohne Limit</small>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="match-section">
+  <div class="shell">
+    <div class="match-card reveal">
+      <div class="phone zoomable"><img src="assets/match-light.jpg" alt="Envie Match-Moment"></div>
+      <div>
+        <div class="kicker">Match-Moment</div>
+        <h2>Ein gemeinsamer Treffer fühlt sich auch so an.</h2>
+        <p class="lead">Ein Match ist kein globales Like. Es ist eine konkrete Entscheidung im richtigen Kontext — mit Bild, Haptik und einem klaren nächsten Schritt.</p>
+        <div class="metric-grid">
+          <div class="metric"><strong>2+</strong><span>Personen für ein Match</span></div>
+          <div class="metric"><strong>1×</strong><span>Planwrite pro Treffer</span></div>
+          <div class="metric"><strong>0</strong><span>doppelte Seiteneffekte</span></div>
+          <div class="metric"><strong>∞</strong><span>Endlos-Treffer ohne Plan</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shell feature-grid reverse">
+    <div class="visual reveal">
+      <div class="phone zoomable"><img src="assets/friends.jpg" alt="Friends Dashboard"></div>
+    </div>
+    <div class="copy-card reveal">
+      <div class="kicker">Freunde</div>
+      <h2>Viele Meinungen. Eine Entscheidung.</h2>
+      <p class="lead">Der Host erstellt eine Runde, lädt per Link ein und setzt Kandidaten sowie Deadlines. Runde eins nominiert und vetoisiert. Runde zwei entscheidet per Like oder Pass.</p>
+      <div class="metric-grid">
+        <div class="metric"><strong>2 Phasen</strong><span>Top-Auswahl und Finale</span></div>
+        <div class="metric"><strong>Batch</strong><span>keine Einzelwrites pro Tap</span></div>
+        <div class="metric"><strong>Deadline</strong><span>absolute Zeitpunkte</span></div>
+        <div class="metric"><strong>Privat</strong><span>keine offenen Veto-Details</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="plan">
+  <div class="shell">
+    <div class="section-head reveal">
+      <div>
+        <div class="kicker">Plan und Einkauf</div>
+        <h2>Aus Entscheidungen wird Alltag.</h2>
+      </div>
+      <p class="lead">Der Wochenplan bleibt gemeinsam. Die Einkaufsliste entsteht daraus, kennt Kategorien und koppelt sich an den Gekocht-Status.</p>
+    </div>
+    <div class="plan-showcase">
+      <div class="phone zoomable reveal"><img src="assets/plan-dark.jpg" alt="Wochenplan im Dark Mode"></div>
+      <div class="phone zoomable reveal"><img src="assets/plan-light.jpg" alt="Wochenplan im Light Mode"></div>
+      <div class="phone zoomable reveal"><img src="assets/shopping.jpg" alt="Einkaufsliste"></div>
+    </div>
+  </div>
+</section>
+
+<section id="kochbuch">
+  <div class="shell">
+    <div class="cookbook-card reveal">
+      <div class="phone zoomable"><img src="assets/cookbook.jpg" alt="Lokales Kochbuch in envie"></div>
+      <div>
+        <div class="kicker">Kochbuch</div>
+        <h2>Deine Bibliothek. Nicht nur ein Archiv.</h2>
+        <p class="lead">Rezepte, Bilder, Tags und Quellen bleiben lokal organisiert. Sammlungen und echte Statistiken machen aus einer Liste eine persönliche Bibliothek.</p>
+        <div class="stat-row">
+          <div class="stat"><strong>Lokal</strong><span>SwiftData als Basis</span></div>
+          <div class="stat"><strong>Bildstark</strong><span>komprimiert und gecacht</span></div>
+          <div class="stat"><strong>Durchsuchbar</strong><span>Tags, Bücher, Suche</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kochen">
+  <div class="shell cooking-wrap">
+    <div class="reveal">
+      <div class="kicker">Kochmodus</div>
+      <h2>Am Herd bleibt nur, was du gerade brauchst.</h2>
+      <p class="lead">Große Schritte, persistierter Fortschritt, Timer und Live Activity. envie merkt sich, wo du warst — auch nach einem App-Neustart.</p>
+      <div class="metric-grid">
+        <div class="metric"><strong>Schritte</strong><span>fokussiert und groß</span></div>
+        <div class="metric"><strong>Timer</strong><span>mit Endzeit statt Drift</span></div>
+        <div class="metric"><strong>Restore</strong><span>aktueller Schritt bleibt</span></div>
+        <div class="metric"><strong>Live</strong><span>Dynamic Island bereit</span></div>
+      </div>
+    </div>
+    <div class="visual reveal">
+      <div class="phone zoomable"><img src="assets/cooking.jpg" alt="Kochmodus mit Timer"></div>
+    </div>
+  </div>
+</section>
+
+<section id="brand">
+  <div class="shell">
+    <div class="brand-copy reveal">
+      <div>
+        <div class="kicker">Markensystem</div>
+        <h2>Eine App mit eigener Stimme.</h2>
+      </div>
+      <p class="lead">Pink und Blau stehen nicht für Deko, sondern für zwei Perspektiven, die zusammenfinden. Die Oberfläche bleibt ruhig, bildstark und klar iOS-nah.</p>
+    </div>
+    <div class="brand-card reveal">
+      <img src="assets/brand-card.jpg" alt="envie Markensystem und Brand Card">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="shell">
+    <div class="section-head reveal">
+      <div>
+        <div class="kicker">Datenschutz und Architektur</div>
+        <h2>Local-first. Cloud dort, wo sie Sinn ergibt.</h2>
+      </div>
+      <p class="lead">Persönliche Rezepte und Kochzustände bleiben lokal. Kollaboration nutzt gezielte Cloud-Slices statt einer permanenten Alles-in-die-Cloud-Architektur.</p>
+    </div>
+    <div class="privacy-grid">
+      <article class="privacy-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <h3>Lokal als Standard</h3>
+        <p>Rezepte, lokale Profile, Kochmodus und persönliche Zustände funktionieren ohne Account.</p>
+      </article>
+      <article class="privacy-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.2A7 7 0 1 0 9 20h9a5 5 0 0 0 0-10Z"/></svg>
+        <h3>Cloud für Zusammenarbeit</h3>
+        <p>Haushalte, Friends-Runden, gemeinsame Pläne und Submissions werden gezielt synchronisiert.</p>
+      </article>
+      <article class="privacy-card reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg>
+        <h3>Klare Grenzen</h3>
+        <p>Keine per-Tap-Cloudpflicht, keine unnötige Vermischung lokaler und kollaborativer Daten.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="shell">
+    <div class="final-panel reveal">
+      <img class="final-logo" src="assets/logo.png" alt="">
+      <div class="kicker">Gemeinsam entdecken. Gemeinsam planen. Gemeinsam genießen.</div>
+      <h2>Was esst ihr heute?</h2>
+      <p class="lead">envie macht aus Rezepten keine weitere Sammlung, sondern einen gemeinsamen, alltagstauglichen Flow.</p>
+      <div class="hero-buttons" style="justify-content:center;margin-bottom:0">
+        <a class="pill primary" href="#top">Zurück nach oben</a>
+        <a class="pill" href="#kochbuch">Kochbuch ansehen</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="shell footer-grid">
+    <div>
+      <a class="logo" href="#top"><img src="assets/logo.png" alt=""><span>envie</span></a>
+      <div style="margin-top:12px">© 2026 envie · Mit SwiftUI gebaut.</div>
+    </div>
+    <div class="footer-links">
+      <a href="#flow">Flow</a>
+      <a href="#entscheiden">Entscheiden</a>
+      <a href="#plan">Plan</a>
+      <a href="#kochbuch">Kochbuch</a>
+      <a href="#kochen">Kochen</a>
+    </div>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button id="lightboxClose" aria-label="Bild schließen">×</button>
+  <img id="lightboxImage" alt="">
+</div>
+
+<script>
+(function(){
+  const root=document.documentElement;
+  const stored=localStorage.getItem("envie-theme");
+  if(stored){root.dataset.theme=stored}
+  else if(matchMedia("(prefers-color-scheme: light)").matches){root.dataset.theme="light"}
+
+  document.getElementById("themeToggle").addEventListener("click",()=>{
+    const next=root.dataset.theme==="light"?"dark":"light";
+    root.dataset.theme=next;
+    localStorage.setItem("envie-theme",next);
+  });
+
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add("in");
+        observer.unobserve(entry.target);
+      }
+    });
+  },{threshold:.12,rootMargin:"0px 0px -50px 0px"});
+  document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
+
+  const box=document.getElementById("lightbox");
+  const boxImg=document.getElementById("lightboxImage");
+  const close=()=>{box.classList.remove("open");box.setAttribute("aria-hidden","true");boxImg.src=""};
+  document.querySelectorAll(".zoomable img").forEach(img=>{
+    img.addEventListener("click",()=>{
+      boxImg.src=img.src;
+      boxImg.alt=img.alt;
+      box.classList.add("open");
+      box.setAttribute("aria-hidden","false");
+    });
+  });
+  document.getElementById("lightboxClose").addEventListener("click",close);
+  box.addEventListener("click",e=>{if(e.target===box)close()});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape")close()});
+})();
+</script>
+</body>
+</html>
